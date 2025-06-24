@@ -59,16 +59,7 @@ app.get('/microsoft/skus', async (req, res) => {
 });
 
 
-// Schedule the sync process to run every 30 minutes
-cron.schedule('*/30 * * * *', async () => {
-  logger.info('Running scheduled sync process...');
-  try {
-    await syncLicenses();
-    logger.info('Scheduled sync process completed.');
-  } catch (error) {
-    logger.error('Scheduled sync process failed:', error);
-  }
-});
+
 
 
 
