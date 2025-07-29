@@ -32,10 +32,16 @@ module.exports = {
     location_id: process.env.LIBCAL_LOCATION_ID,
     category_id: process.env.LIBCAL_CATEGORY_ID,
   },
-  adobe: {
-    client_id: process.env.ADOBE_CLIENT_ID,
-    client_secret: process.env.ADOBE_CLIENT_SECRET,
-  },
+adobe: {
+  client_id: process.env.ADOBE_CLIENT_ID,
+  client_secret: process.env.ADOBE_CLIENT_SECRET,
+  org_id: process.env.ADOBE_ORG_ID,
+  technical_account_id: process.env.ADOBE_TECHNICAL_ACCOUNT_ID,
+  private_key: process.env.ADOBE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  domain: 'greenburghlibrary.org', // Adobe federated domain
+  productId: process.env.ADOBE_PRODUCT_ID,
+  productProfileId: process.env.ADOBE_PROFILE_ID,
+},
   microsoft: {
     client_id: process.env.MICROSOFT_CLIENT_ID,
     client_secret: process.env.MICROSOFT_CLIENT_SECRET,
@@ -47,24 +53,34 @@ module.exports = {
     pass: process.env.EMAIL_PASS,
   },
   cron_schedule: '*/10 * * * *', // Every 10 minutes
-  software: [
-    {
-      vendor: 'Adobe',
-      productName: 'Adobe Acrobat',
-      vendorGroupName: 'Library Acrobat Patrons',
-      vendorGroupId: '123456789',
-      libCalName: 'Adobe Acrobat License',
-      libCalCid: process.env.LIBCAL_ADOBE_CID || '11111',
-      active: false,
-    },
-    ...Array.from({ length: 10 }).map((_, index) => ({
-      vendor: 'Microsoft',
-      productName: 'Microsoft Business Premium',
-      skuId: process.env[`MICROSOFT_SKU_ID_${index + 1}`],
-      libCalName: 'Microsoft Business Premium - Word, Excel, PowerPoint',
-      libCalCid: process.env[`MICROSOFT_LIBCAL_CID_${index + 1}`],
-      disabledPlans,
-      active: true,
-    })),
-  ],
+software: [
+  {
+    vendor: 'Adobe',
+    productName: 'Adobe Acrobat - Create, Edit, Merge PDFs (1)',
+    vendorGroupName: 'Library Acrobat Patrons',
+    vendorGroupId: '123456789',
+    libCalName: 'Adobe Acrobat - Create, Edit, Merge PDFs',
+    libCalCid: 'process.env.LIBCAL_ADOBE_CID_1',
+    active: false,
+  },
+  {
+    vendor: 'Adobe',
+    productName: 'Adobe Acrobat - Create, Edit, Merge PDFs (2)',
+    vendorGroupName: 'Library Acrobat Patrons',
+    vendorGroupId: '123456789',
+    libCalName: 'Adobe Acrobat - Create, Edit, Merge PDFs',
+    libCalCid: 'process.env.LIBCAL_ADOBE_CID_2',
+    active: false,
+  },
+  ...Array.from({ length: 10 }).map((_, index) => ({
+    vendor: 'Microsoft',
+    productName: 'Microsoft Business Premium',
+    skuId: process.env[`MICROSOFT_SKU_ID_${index + 1}`],
+    libCalName: 'Microsoft Business Premium - Word, Excel, PowerPoint',
+    libCalCid: process.env[`MICROSOFT_LIBCAL_CID_${index + 1}`],
+    disabledPlans,
+    active: true,
+  })),
+],
+
 };
