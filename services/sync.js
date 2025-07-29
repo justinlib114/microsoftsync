@@ -1,5 +1,6 @@
 const libcal = require('./libcal');
 const microsoft = require('./microsoft');
+const adobe = require('./adobe');
 const logger = require('../lib/logger');
 const config = require('../config/config');
 
@@ -19,11 +20,14 @@ async function syncLicenses() {
 
     logger.info('Confirmed bookings:', JSON.stringify(confirmedBookings, null, 2));
 
+    // === Microsoft Sync (UNCHANGED) ===
     for (const software of config.software) {
       if (!software.active || !software.skuId) {
         logger.warn(`Skipping software: ${software.productName}`);
         continue;
       }
+
+      if (software.vendor.toLowerCase() !== 'microsoft') continue;
 
       const activeUsers = new Set();
 
@@ -57,6 +61,38 @@ async function syncLicenses() {
         }
       } catch (err) {
         logger.error(`Error revoking licenses for ${software.productName}: ${err.message}`);
+      }
+    }
+
+    // === Adobe Sync (NEW SECTION) ===
+    for (const software of config.software) {
+      if (!software.active || software.vendor.toLowerCase() !== 'adobe') continue;
+
+      const activeEmails = new Set();
+
+      for (const booking of confirmedBookings) {
+        const { email, cid } = booking;
+
+        if (software.libCalCid && software.libCalCid !== cid.toString()) continue;
+
+        try {
+          await adobe.assignAdobeLicense(email);
+          activeEmails.add(email.toLowerCase());
+        } catch (err) {
+          logger.error(`Error assigning Adobe license to ${email}: ${err.message}`);
+        }
+      }
+
+      try {
+        const previouslyAssigned = adobe.getUsersWithLicense();
+        for (const email of previouslyAssigned) {
+          if (!activeEmails.has(email.toLowerCase())) {
+            await adobe.revokeAdobeLicense(email);
+            logger.info(`Revoked Adobe license from ${email}`);
+          }
+        }
+      } catch (err) {
+        logger.error(`Error revoking Adobe licenses for ${software.productName}: ${err.message}`);
       }
     }
 
