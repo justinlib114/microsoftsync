@@ -54,9 +54,9 @@ module.exports = {
     },
     ...Array.from({ length: 10 }).map((_, index) => ({
       vendor: 'Microsoft',
-      productName: 'Microsoft Business Premium',
+      productName: 'Microsoft Business Standard',
       skuId: process.env[`MICROSOFT_SKU_ID_${index + 1}`],
-      libCalName: 'Microsoft Business Premium - Word, Excel, PowerPoint',
+      libCalName: 'Microsoft Business Standard - Word, Excel, PowerPoint',
       libCalCid: process.env[`MICROSOFT_LIBCAL_CID_${index + 1}`],
       disabledPlans,
       active: true,
