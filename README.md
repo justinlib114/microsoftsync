@@ -1,5 +1,7 @@
 # LibCal Software License Sync — Render.com Deployment Guide
 
+## Credit to Ken Irwin and Michael Bomholt for providing their Software Checkout code https://github.com/Miamiohlibs/SoftwareCheckout ##
+
 ## Overview: What Does This Code Do?
 
 This project **automates the management of Microsoft 365 (and optionally, Adobe) software licenses based on LibCal equipment bookings** at your organization.
