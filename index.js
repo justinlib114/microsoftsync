@@ -28,18 +28,10 @@ app.get('/', (req, res) => {
 app.get('/sync', async (req, res) => {
   try {
     await syncLicenses();
-    res.status(200).render('sync', {
-      success: true,
-      message: 'Sync completed successfully.',
-      timestamp: new Date().toLocaleString()
-    });
+    res.status(200).send('Sync completed successfully.');
   } catch (error) {
     logger.error('Manual sync failed:', error);
-    res.status(500).render('sync', {
-      success: false,
-      message: 'Sync failed, please contact the library for more assistance',
-      timestamp: new Date().toLocaleString()
-    });
+    res.status(500).send('Sync failed.');
   }
 });
 
