@@ -52,7 +52,7 @@ module.exports = {
       libCalCid: process.env.LIBCAL_ADOBE_CID || '11111',
       active: false,
     },
-    ...Array.from({ length: 10 }).map((_, index) => ({
+    ...Array.from({ length: 5 }).map((_, index) => ({
       vendor: 'Microsoft',
       productName: 'Microsoft Business Standard',
       skuId: process.env[`MICROSOFT_SKU_ID_${index + 1}`],
